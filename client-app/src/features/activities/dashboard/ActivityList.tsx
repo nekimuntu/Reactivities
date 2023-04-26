@@ -5,9 +5,10 @@ import { Activity } from '../../../app/models/Activity';
 interface Props {
     activities: Activity[];
     handleSelect:(id:string)=>void;
+    deleteActivity:(id:string)=>void;
 }
 
-export default function ActivityList({ activities,handleSelect }: Props) {
+export default function ActivityList({ activities,handleSelect,deleteActivity }: Props) {
     return (
         //Source : https://react.semantic-ui.com/views/item/#types-items
 
@@ -25,7 +26,9 @@ export default function ActivityList({ activities,handleSelect }: Props) {
                             </Item.Description>
                             
                             <Item.Extra>
+                                <Button onClick={()=>deleteActivity(activity.id)} floated='right' content='Remove' color='red'/>
                                 <Button onClick={()=>handleSelect(activity.id)} floated='right' content='View' color='blue'/>
+                                
                                 <Label basic content={activity.category} />                                
                             </Item.Extra>
                         </Item.Content>

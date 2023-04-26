@@ -10,38 +10,44 @@ interface Props {
     selectedActivity: Activity | undefined;
     handleSelect: (id: string) => void;
     handleCancel: () => void;
-    formOpened: boolean;
-    handleOpenForm: () => void;
+    editMode: boolean;
+    handleOpenForm: (id?:string) => void;
     handleCloseForm: () => void;
+    creatOrEdit:(activity:Activity)=>void;
+    deleteActivity:(id:string)=>void;
 }
+
 export default function ActivityDashboard({ activities, selectedActivity,
     handleSelect, handleCancel,
-    formOpened,
+    editMode,
     handleOpenForm,
-    handleCloseForm }: Props) {
+    handleCloseForm,
+    creatOrEdit,
+    deleteActivity }: Props) {
 
     return (
         <Grid>
             <Grid.Column width={10}>
-                <ActivityList activities={activities} handleSelect={handleSelect} />
+                <ActivityList deleteActivity={deleteActivity} activities={activities} handleSelect={handleSelect} />
             </Grid.Column>
             <Grid.Column width={6}>
                 {
-                    selectedActivity && !formOpened &&
+                    selectedActivity && !editMode &&
                     <ActivityDetails
                         activity={selectedActivity}
                         handleCancel={handleCancel}
                         handleOpenForm={handleOpenForm}
-                        formOpened={formOpened}
                     />
                 }
                 {
-                    selectedActivity && formOpened &&
+                    editMode &&
                     <ActivityForm
                         handleCloseForm={handleCloseForm}
-                        formOpened={formOpened}
-                    />
+                        activity={selectedActivity}
+                        creatOrEdit={creatOrEdit}
+                    />                    
                 }
+                
             </Grid.Column>
 
         </Grid>

@@ -1,15 +1,15 @@
 import React from 'react';
 import { Activity } from '../../../app/models/Activity';
-import { Button, ButtonGroup, Card, Icon, Image } from 'semantic-ui-react';
+import { Button, ButtonGroup, Card, Image } from 'semantic-ui-react';
 
 interface Props {
     activity: Activity;
     handleCancel:()=>void;
-    formOpened:boolean;
-    handleOpenForm:()=>void;
+    // formOpened:boolean;
+    handleOpenForm:(id?:string)=>void;
 }
 
-export default function ActivityDetails({ activity,handleCancel,formOpened,handleOpenForm }: Props) {
+export default function ActivityDetails({ activity,handleCancel,handleOpenForm }: Props) {
     
     return (
         <Card fluid>
@@ -25,7 +25,7 @@ export default function ActivityDetails({ activity,handleCancel,formOpened,handl
             </Card.Content>
             <Card.Content extra>
                 <ButtonGroup>
-                    <Button onClick={handleOpenForm} basic color='blue' content='Edit' />
+                    <Button onClick={()=>handleOpenForm(activity.id)} basic color='blue' content='Edit' />
                     <Button onClick={handleCancel} basic color='grey' content='Cancel' />
 
                 </ButtonGroup>
