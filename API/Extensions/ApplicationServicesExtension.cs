@@ -23,7 +23,7 @@ namespace API.Extensions
             {
                 opt.AddPolicy("ReactivitiesCORSPolicy", policy =>
                 {
-                    policy.AllowAnyMethod().WithOrigins("*");
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
                 });
             });
 

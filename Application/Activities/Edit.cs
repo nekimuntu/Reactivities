@@ -13,12 +13,11 @@ namespace Application.Activities
     {
         public class Command : IRequest
         {
-            public Guid Id { get; set; }
             public Activity activity { get; set; }
         }
         public class Handler : IRequestHandler<Command>
         {
-            
+
             private readonly IMapper _mapper;
 
             private readonly DataContext _context;
@@ -30,12 +29,8 @@ namespace Application.Activities
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var activity = await _context.Activities.FindAsync(request.Id);
-                if (activity != null)
-                {
-                    request.activity.Id = activity.Id;
-                    _mapper.Map<Activity,Activity>(request.activity,activity);
-                }
+                var activity = await _context.Activities.FindAsync(request.activity.Id);
+                _mapper.Map<Activity, Activity>(request.activity, activity);
                 _context.Activities.Update(activity);
                 _context.SaveChanges();
                 return Unit.Value;
