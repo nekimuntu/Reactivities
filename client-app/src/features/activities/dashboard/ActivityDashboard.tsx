@@ -1,59 +1,29 @@
 import React from 'react'
-import { Container, Grid, List } from 'semantic-ui-react';
-import { Activity } from '../../../app/models/Activity';
+import { Grid } from 'semantic-ui-react';
+
 import ActivityList from './ActivityList';
 import ActivityDetails from '../details/ActivityDetails';
 import ActivityForm from '../form/ActivityForm';
+import { useStore } from '../../../app/store/store';
+import { observer } from 'mobx-react-lite';
 
-interface Props {
-    activities: Activity[];
-    selectedActivity: Activity | undefined;
-    handleSelect: (id: string) => void;
-    handleCancel: () => void;
-    editMode: boolean;
-    handleOpenForm: (id?:string) => void;
-    handleCloseForm: () => void;
-    creatOrEdit:(activity:Activity)=>void;
-    deleteActivity:(id:string)=>void;
-    submitting:boolean;
-}
 
-export default function ActivityDashboard({ activities, selectedActivity,
-    handleSelect, handleCancel,
-    editMode,
-    handleOpenForm,
-    handleCloseForm,
-    creatOrEdit,
-    deleteActivity,
-    submitting }: Props) {
 
+ function ActivityDashboard() {
+    const {activityStore} = useStore();
     return (
         <Grid>
             <Grid.Column width={10}>
-                <ActivityList 
-                    deleteActivity={deleteActivity}
-                    activities={activities} 
-                    handleSelect={handleSelect} 
-                    submitting={submitting}
-                />
+                <ActivityList />
             </Grid.Column>
             <Grid.Column width={6}>
                 {
-                    selectedActivity && !editMode &&
-                    <ActivityDetails
-                        activity={selectedActivity}
-                        handleCancel={handleCancel}
-                        handleOpenForm={handleOpenForm}
-                    />
+                    activityStore.selectedActivity && !activityStore.editMode &&
+                    <ActivityDetails />
                 }
                 {
-                    editMode &&
-                    <ActivityForm
-                        handleCloseForm={handleCloseForm}
-                        activity={selectedActivity}
-                        creatOrEdit={creatOrEdit}
-                        submitting={submitting}
-                    />                    
+                    activityStore.editMode &&
+                    <ActivityForm activity={activityStore.selectedActivity}/>                    
                 }
                 
             </Grid.Column>
@@ -61,3 +31,4 @@ export default function ActivityDashboard({ activities, selectedActivity,
         </Grid>
     );
 }
+export default observer(ActivityDashboard);

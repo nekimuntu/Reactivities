@@ -1,15 +1,15 @@
 import React from 'react';
 import { Activity } from '../../../app/models/Activity';
 import { Button, ButtonGroup, Card, Image } from 'semantic-ui-react';
+import { useStore } from '../../../app/store/store';
+import LoadingComponent from '../../../app/layout/LoadingComponent';
 
-interface Props {
-    activity: Activity;
-    handleCancel:()=>void;
-    // formOpened:boolean;
-    handleOpenForm:(id?:string)=>void;
-}
 
-export default function ActivityDetails({ activity,handleCancel,handleOpenForm }: Props) {
+export default function ActivityDetails() {
+    const {activityStore} = useStore();
+    const {selectedActivity:activity} = activityStore;
+
+    if (!activity) return <LoadingComponent/>
     
     return (
         <Card fluid>
@@ -25,8 +25,8 @@ export default function ActivityDetails({ activity,handleCancel,handleOpenForm }
             </Card.Content>
             <Card.Content extra>
                 <ButtonGroup>
-                    <Button onClick={()=>handleOpenForm(activity.id)} basic color='blue' content='Edit' />
-                    <Button onClick={handleCancel} basic color='grey' content='Cancel' />
+                    <Button onClick={()=>activityStore.openForm(activity.id)} basic color='blue' content='Edit' />
+                    <Button onClick={activityStore.cancelActivity} basic color='grey' content='Cancel' />
 
                 </ButtonGroup>
             </Card.Content>
