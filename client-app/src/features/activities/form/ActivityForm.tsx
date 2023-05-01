@@ -1,29 +1,45 @@
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { Button, Form, Segment } from 'semantic-ui-react';
-import { Activity } from '../../../app/models/Activity';
-
-import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { useStore } from '../../../app/store/store';
 import { observer } from 'mobx-react-lite';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Activity } from '../../../app/models/Activity';
+import {v4 as uuid} from 'uuid'
 
-interface Props {
-    activity: Activity | undefined;
-}
-export default observer(function ActivityForm({  activity }: Props) {
-    const {activityStore} = useStore();
-    const intialState = activity ?? {
-        id: '',
-        title: '',
-        date: '',
-        description: '',
-        category: '',
-        city: '',
-        venue: ''
-    };
-    const [stateActivity, setActivity] = useState(intialState);
+
+export default observer(function ActivityForm() {
+    const { id } = useParams();
+    const { activityStore } = useStore();
+    if (id) activityStore.loadActivity(id);
+    const navig = useNavigate();
+
+    const [stateActivity, setActivity] = useState<Activity>(
+        {
+            id: '',
+            title: '',
+            date: '',
+            description: '',
+            category: '',
+            city: '',
+            venue: ''
+        }
+    );
+    
+    useEffect(() => {        
+        if (id) activityStore.loadActivity(id).then(activity=>setActivity(activityStore.selectedActivity!));
+        
+    }, [id, activityStore.loadActivity])
+
     const funcHandleSubmit = () => {
         // axios.post('').then(()=>{});
-        activityStore.createOrEdit(stateActivity);
+        if (!stateActivity.id){
+            stateActivity.id = uuid();
+            activityStore.update(stateActivity).then(navig(`/activities/${stateActivity.id}`)!);
+        }
+        else{
+            activityStore.create(stateActivity).then(navig(`/activities/${stateActivity.id}`)!);
+        }
+        
     }
 
     function handleOnChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
@@ -41,7 +57,9 @@ export default observer(function ActivityForm({  activity }: Props) {
                 <Form.Input placeholder="City" name='city' value={stateActivity.city} onChange={handleOnChange} />
                 <Form.Input placeholder="Venue" name='venue' value={stateActivity.venue} onChange={handleOnChange} />
                 <Button loading={activityStore.submitting} floated='right' positive type='submit' content='Submit' />
-                <Button onClick={activityStore.closeForm} floated='right' type='submit' content='Cancel' />
+                <Button
+                    as={Link} to='/activities'
+                    floated='right' content='Cancel' />
             </Form>
         </Segment>
     );
