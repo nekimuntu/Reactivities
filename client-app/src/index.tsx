@@ -1,10 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
-import './app/layout/style.css';
 import { StoreContext, store } from './app/store/store';
 import { RouterProvider } from 'react-router-dom';
 import { router } from './app/router/Routes';
+
+import 'semantic-ui-css/semantic.min.css';
+import 'react-calendar/dist/Calendar.css';
+import './app/layout/style.css';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

@@ -1,11 +1,6 @@
-import 'semantic-ui-css/semantic.min.css';
 import React, { Fragment } from 'react';
-import './App.css';
 import { Container } from 'semantic-ui-react'
-
 import NavBar from './NavBar';
-
-
 import { observer } from 'mobx-react-lite';
 import { Outlet, useLocation } from 'react-router-dom';
 import HomPage from './home/HomePage';
