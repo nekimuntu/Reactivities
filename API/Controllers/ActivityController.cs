@@ -1,4 +1,5 @@
 using Application.Activities;
+using Application.Core;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,28 +9,39 @@ namespace API.Controllers
     {
         
         [HttpGet] //api/activities
-        public async Task<ActionResult<List<Activity>>> GetActivities(CancellationToken ct)
+        public async Task<IActionResult> GetActivities(CancellationToken ct)
         {
-            return await Mediator.Send(new List.Query(),ct);
+            return HandleResult(await Mediator.Send(new List.Query(),ct));
         }
         [HttpGet("{id}")] //api/activities/?id
-        public async Task<ActionResult<Activity>> GetActivity(Guid id)
+        public async Task<IActionResult> GetActivity(Guid id)
         {
-            return await Mediator.Send(new Details.Query{
-                Id = id
-            });
+            return HandleResult(await Mediator.Send(new Details.Query{Id = id}));
+           
         }
+                        ///Another way to send errors... just leaving the individuals Controllers handle it \\\
+        //  [HttpGet("{id}")] //api/activities/?id
+        // public async Task<IActionResult> GetActivity(Guid id)
+        // {
+        //     var result= await Mediator.Send(new Details.Query{Id = id});
+        //     if(result.IsSucces && result.Value !=null)
+        //         return Ok(result.Value);
+        //     if(result.IsSucces && result.Value ==null)
+        //         return NotFound();
+        //     return BadRequest(result.Error);
+        // }
         [HttpPost] //api/activities/
         public async Task<IActionResult> CreateActivity(Activity _activity)
         {
-           return Ok( await Mediator.Send(new Create.Command{
+           return HandleResult( await Mediator.Send(new Create.Command{
                 activity=_activity
             }));
         }
         [HttpPut("{id}")] //api/activities/?id
-        public async Task<IActionResult> EditActivity(Activity _activity)
+        public async Task<IActionResult> EditActivity(Guid id, Activity _activity)
         {
-            return Ok( await Mediator.Send(new Edit.Command{                
+            _activity.Id=id;
+            return HandleResult( await Mediator.Send(new Edit.Command{                
                 activity=_activity
             }));
         }
@@ -37,7 +49,7 @@ namespace API.Controllers
         [HttpDelete("{id}")] //api/activities/
         public async Task<IActionResult> DeleteActivity(Guid id)
         {
-           return Ok( await Mediator.Send(new Remove.Command{
+           return HandleResult( await Mediator.Send(new Remove.Command{
                 Id=id
             }));
         }

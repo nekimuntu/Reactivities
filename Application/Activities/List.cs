@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Core;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -12,8 +13,8 @@ namespace Application.Activities
 {
     public class List
     {
-        public class Query : IRequest<List<Activity>> { }
-        public class Handler : IRequestHandler<Query, List<Activity>>
+        public class Query : IRequest<Result<List<Activity>>> { }
+        public class Handler : IRequestHandler<Query, Result<List<Activity>>>
         {
             private readonly ILogger<List> _logger;
 
@@ -24,7 +25,7 @@ namespace Application.Activities
                 _context = context;
             }
 
-            public async Task<List<Activity>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<Activity>>> Handle(Query request, CancellationToken cancellationToken)
             {
                             ///A utiliser si l on veux implementer l annulation par le client \\\
                 // try
@@ -42,7 +43,8 @@ namespace Application.Activities
                 //     _logger.LogInformation("Task was canceled by user") ;
                 // }
 
-                return await _context.Activities.ToListAsync();
+                var list = await _context.Activities.ToListAsync();
+                return Result<List<Activity>>.Success(list);
             }
         }
     }

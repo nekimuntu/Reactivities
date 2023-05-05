@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Core;
 using AutoMapper;
 using Domain;
 using MediatR;
@@ -11,11 +12,12 @@ namespace Application.Activities
 {
     public class Edit
     {
-        public class Command : IRequest
+        public class Command : IRequest<Result<Unit>>
         {
+           
             public Activity activity { get; set; }
         }
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command,Result<Unit>>
         {
 
             private readonly IMapper _mapper;
@@ -27,13 +29,19 @@ namespace Application.Activities
                 _context = context;
             }
 
-            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var activity = await _context.Activities.FindAsync(request.activity.Id);
+                if(activity==null)
+                    return null;
+
                 _mapper.Map<Activity, Activity>(request.activity, activity);
-                _context.Activities.Update(activity);
-                _context.SaveChanges();
-                return Unit.Value;
+                
+                
+                 var result = await _context.SaveChangesAsync() > 0 ;
+                 if(!result) return Result<Unit>.Failure("Failed to Update this activity.");
+
+                return Result<Unit>.Success(Unit.Value);
             }
         }
     }

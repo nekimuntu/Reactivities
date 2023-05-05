@@ -5,9 +5,11 @@ import { StoreContext, store } from './app/store/store';
 import { RouterProvider } from 'react-router-dom';
 import { router } from './app/router/Routes';
 
+
 import 'semantic-ui-css/semantic.min.css';
 import 'react-calendar/dist/Calendar.css';
 import './app/layout/style.css';
+import 'react-toastify/dist/ReactToastify.min.css'
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

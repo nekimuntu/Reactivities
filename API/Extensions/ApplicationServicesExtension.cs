@@ -4,6 +4,8 @@ using AutoMapper;
 using MediatR;
 using Application.Core;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 namespace API.Extensions
 {
@@ -26,9 +28,15 @@ namespace API.Extensions
                     policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
                 });
             });
-
+            // ValidatorOptions.Global.LanguageManager.Culture = new CultureInfo("fr");
+            ValidatorOptions.Global.LanguageManager.Enabled = false;
+            // ValidatorOptions.Global.LanguageManager = new CustomLanguageManager();
+            services.AddFluentValidationAutoValidation();
+            services.AddValidatorsFromAssemblyContaining(typeof(Create));
             services.AddMediatR(typeof(List.Handler));
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+            
+            
 
             return services;
         }
