@@ -8,7 +8,9 @@ body {
 .ui.container.homepage {
   width: 100%;
 }
-
+.react-datepicker-wrapper{
+  width:100%;
+}
 .react-calendar {
   width: 100%;
   border:none;
