@@ -7,6 +7,7 @@ using MediatR;
 using Persistence;
 using FluentValidation;
 using Application.Core;
+using System.Threading;
 
 namespace Application.Activities
 {
