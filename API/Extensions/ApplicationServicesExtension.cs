@@ -6,6 +6,8 @@ using Application.Core;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Application.Interfaces;
+using Infrastructure.Security;
 
 namespace API.Extensions
 {
@@ -35,8 +37,8 @@ namespace API.Extensions
             services.AddValidatorsFromAssemblyContaining(typeof(Create));
             services.AddMediatR(typeof(List.Handler));
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
-            
-            
+            services.AddHttpContextAccessor();
+            services.AddScoped<IUserAccessor,UserAccessor>();            
 
             return services;
         }
