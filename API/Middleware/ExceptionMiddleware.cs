@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace API.Middleware
 {
@@ -14,15 +10,14 @@ namespace API.Middleware
         private readonly RequestDelegate _next;
 
         public ExceptionMiddleware(RequestDelegate next,
-        ILogger<ExceptionMiddleware> logger,
-        IHostEnvironment env)
+                                    ILogger<ExceptionMiddleware> logger,
+                                    IHostEnvironment env)
         {
             _logger = logger;
             _env = env;
             _next=next;
         }
         public async Task InvokeAsync(HttpContext context){
-
             try
             {
                 await _next(context);
@@ -31,7 +26,7 @@ namespace API.Middleware
             {
                 
                 _logger.LogError(ex,ex.Message);
-                context.Response.ContentType="application/json"; //to specify cause we re out of the API controller
+                context.Response.ContentType="application/json"; //to specify because we re out of the API controller
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
                 var response = _env.IsDevelopment()

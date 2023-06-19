@@ -24,8 +24,8 @@ export default function ActivityListItem({activity}:Props) {
             <Segment>
                 <Item>
                     <ItemImage size='tiny' circular src='/assets/user.png' />
-                    <ItemContent>
-                    <Item.Header as={Link} to={`/activities/${activity.id}`} >
+                    <ItemContent >
+                    <Item.Header  as={Link} to={`/activities/${activity.id}`} >
                         {activity.title}
                     </Item.Header>
                     <Item.Description>Hosted by Bob</Item.Description>

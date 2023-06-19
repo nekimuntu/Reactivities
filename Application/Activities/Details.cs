@@ -4,10 +4,8 @@ using System.Threading.Tasks;
 using Application.Core;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Domain;
 using MediatR;
 using Persistence;
-using Application.Profile;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Activities

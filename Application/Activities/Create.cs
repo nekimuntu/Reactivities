@@ -28,8 +28,7 @@ namespace Application.Activities
         }
         public class Handler : IRequestHandler<Command,Result<Unit>>
         {
-        private readonly IUserAccessor _userAccessor;
-
+            private readonly IUserAccessor _userAccessor;
             private readonly DataContext _context;
             public Handler(DataContext context,IUserAccessor userAccessor)
             {
@@ -41,8 +40,9 @@ namespace Application.Activities
             {
                 var user = await _context.Users.FirstOrDefaultAsync(x=>x.UserName==_userAccessor.GetUsername());
 
-                var attendee = new ActivityAppUser{
+                var attendee = new ActivityAttendee{
                     AppUserId = user.Id,
+                    AppUser = user,
                     ActivityId=request.activity.Id,
                     IsHost = true
                 };

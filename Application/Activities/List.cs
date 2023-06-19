@@ -44,7 +44,6 @@ namespace Application.Activities
                 // }
                 // catch (System.Exception)
                 // {
-
                 //     _logger.LogInformation("Task was canceled by user") ;
                 // }
 

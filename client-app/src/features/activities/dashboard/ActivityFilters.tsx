@@ -1,5 +1,4 @@
 import React from 'react'
-import Calendar from 'react-calendar'
 import { Menu, Header } from 'semantic-ui-react'
 
 export default function ActivityFilters() {
@@ -13,7 +12,7 @@ export default function ActivityFilters() {
 
             </Menu>
             <Header />
-            <Calendar/>
+            
         </>
 
     )

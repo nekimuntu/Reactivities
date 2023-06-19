@@ -38,6 +38,8 @@ namespace API.Controllers
                 activity=_activity
             }));
         }
+
+        [Authorize(Policy = "IsActivityPolicy")]
         [HttpPut("{id}")] //api/activities/?id
         public async Task<IActionResult> EditActivity(Guid id, Activity _activity)
         {
@@ -47,12 +49,20 @@ namespace API.Controllers
             }));
         }
 
+        [Authorize(Policy = "IsActivityPolicy")]
         [HttpDelete("{id}")] //api/activities/
         public async Task<IActionResult> DeleteActivity(Guid id)
         {
            return HandleResult( await Mediator.Send(new Remove.Command{
                 Id=id
             }));
+        }
+
+        
+        [HttpPost("{id}/attend")]
+        public async Task<IActionResult> Attend(Guid id)
+        {
+            return HandleResult(await Mediator.Send(new UpdateAttendance.Command{Id=id}));
         }
     }
 }
